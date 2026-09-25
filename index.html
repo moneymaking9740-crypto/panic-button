@@ -1,0 +1,1365 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>PANIC BUTTON — $PANIC</title>
+
+  <meta
+    name="description"
+    content="PANIC BUTTON — The internet's emergency button."
+  >
+
+  <style>
+    /* =========================
+       RESET
+    ========================= */
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family:
+        Inter,
+        system-ui,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+
+      background:
+        radial-gradient(
+          circle at top,
+          #260606 0%,
+          #090909 45%,
+          #050505 100%
+        );
+
+      color: white;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    button {
+      font-family: inherit;
+    }
+
+    /* =========================
+       VARIABLES
+    ========================= */
+
+    :root {
+      --red: #ff2417;
+      --red-dark: #8e0000;
+      --red-light: #ff6258;
+      --background: #080808;
+      --card: #121212;
+      --border: #292929;
+      --muted: #999;
+    }
+
+    /* =========================
+       CONTAINER
+    ========================= */
+
+    .container {
+      width: min(1100px, 92%);
+      margin: auto;
+    }
+
+    /* =========================
+       NAVIGATION
+    ========================= */
+
+    nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      padding: 25px 0;
+    }
+
+    .logo {
+      font-size: 22px;
+      font-weight: 1000;
+      letter-spacing: 1px;
+    }
+
+    .logo span {
+      color: var(--red);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 25px;
+      color: #aaa;
+      font-weight: 700;
+      font-size: 14px;
+    }
+
+    .nav-links a:hover {
+      color: white;
+    }
+
+    /* =========================
+       HERO
+    ========================= */
+
+    .hero {
+      text-align: center;
+      padding: 75px 10px 80px;
+    }
+
+    .badge {
+      display: inline-block;
+
+      border: 1px solid #383838;
+      background: #111;
+
+      padding: 9px 15px;
+      border-radius: 999px;
+
+      color: #aaa;
+      font-size: 13px;
+      font-weight: 800;
+      letter-spacing: .5px;
+    }
+
+    .hero h1 {
+      font-size: clamp(60px, 12vw, 135px);
+
+      line-height: .82;
+
+      margin: 30px 0;
+
+      font-weight: 1000;
+
+      letter-spacing: -7px;
+
+      text-shadow:
+        0 0 30px rgba(255, 36, 23, .18);
+    }
+
+    .hero h1 span {
+      color: var(--red);
+    }
+
+    .hero-description {
+      max-width: 650px;
+
+      margin: auto;
+
+      color: #aaa;
+
+      font-size: 20px;
+
+      line-height: 1.6;
+    }
+
+    /* =========================
+       PANIC BUTTON
+    ========================= */
+
+    .panic-area {
+      margin-top: 45px;
+    }
+
+    .panic-button {
+      width: 240px;
+      height: 240px;
+
+      border-radius: 50%;
+
+      border: 13px solid #350606;
+
+      background:
+        radial-gradient(
+          circle at 35% 25%,
+          #ff756d,
+          #ff2117 48%,
+          #9d0000 100%
+        );
+
+      color: white;
+
+      font-size: 34px;
+
+      font-weight: 1000;
+
+      letter-spacing: 2px;
+
+      cursor: pointer;
+
+      box-shadow:
+        0 0 0 8px #151515,
+        0 20px 70px rgba(255, 36, 23, .35),
+        inset 0 -20px 35px rgba(0, 0, 0, .25);
+
+      transition:
+        transform .12s,
+        box-shadow .12s;
+    }
+
+    .panic-button:hover {
+      transform: scale(1.04);
+
+      box-shadow:
+        0 0 0 8px #151515,
+        0 25px 90px rgba(255, 36, 23, .5),
+        inset 0 -20px 35px rgba(0, 0, 0, .25);
+    }
+
+    .panic-button:active {
+      transform: scale(.91);
+    }
+
+    .press-counter {
+      margin-top: 25px;
+
+      color: #888;
+
+      font-size: 15px;
+    }
+
+    .press-counter strong {
+      color: white;
+      font-size: 18px;
+    }
+
+    /* =========================
+       SECTIONS
+    ========================= */
+
+    section {
+      padding: 70px 0;
+    }
+
+    .section-title {
+      font-size: 38px;
+
+      margin-bottom: 10px;
+
+      font-weight: 1000;
+    }
+
+    .section-description {
+      color: var(--muted);
+
+      margin-bottom: 30px;
+    }
+
+    /* =========================
+       CARDS
+    ========================= */
+
+    .grid {
+      display: grid;
+
+      grid-template-columns:
+        repeat(3, 1fr);
+
+      gap: 18px;
+    }
+
+    .card {
+      background:
+        linear-gradient(
+          145deg,
+          #151515,
+          #0d0d0d
+        );
+
+      border: 1px solid var(--border);
+
+      border-radius: 22px;
+
+      padding: 28px;
+
+      box-shadow:
+        0 15px 40px rgba(0, 0, 0, .2);
+    }
+
+    .card h3 {
+      font-size: 20px;
+
+      margin-bottom: 15px;
+    }
+
+    .card p {
+      color: #999;
+
+      line-height: 1.6;
+    }
+
+    /* =========================
+       PANIC METER
+    ========================= */
+
+    .panic-number {
+      font-size: 55px;
+
+      font-weight: 1000;
+
+      margin-bottom: 15px;
+    }
+
+    .progress {
+      height: 18px;
+
+      background: #252525;
+
+      border-radius: 999px;
+
+      overflow: hidden;
+
+      margin: 18px 0;
+    }
+
+    .progress-fill {
+      width: 0%;
+
+      height: 100%;
+
+      background:
+        linear-gradient(
+          90deg,
+          #8e0000,
+          #ff2417,
+          #ff756d
+        );
+
+      transition: width .3s;
+    }
+
+    .status {
+      color: #aaa;
+
+      font-weight: 700;
+    }
+
+    /* =========================
+       ALERT
+    ========================= */
+
+    .alert-box {
+      font-size: 25px;
+
+      font-weight: 1000;
+
+      line-height: 1.25;
+    }
+
+    .alert-icon {
+      font-size: 35px;
+
+      margin-bottom: 15px;
+    }
+
+    /* =========================
+       MASCOT
+    ========================= */
+
+    .mascot {
+      font-size: 100px;
+
+      text-align: center;
+
+      margin: 10px 0 20px;
+
+      animation:
+        chicken 2s infinite ease-in-out;
+    }
+
+    @keyframes chicken {
+
+      0% {
+        transform: rotate(-4deg);
+      }
+
+      50% {
+        transform: rotate(4deg) translateY(-5px);
+      }
+
+      100% {
+        transform: rotate(-4deg);
+      }
+    }
+
+    /* =========================
+       MEME WALL
+    ========================= */
+
+    .meme-grid {
+      display: grid;
+
+      grid-template-columns:
+        repeat(3, 1fr);
+
+      gap: 16px;
+    }
+
+    .meme {
+      min-height: 190px;
+
+      padding: 22px;
+
+      border-radius: 18px;
+
+      border: 1px solid #282828;
+
+      background:
+        linear-gradient(
+          135deg,
+          #181818,
+          #0d0d0d
+        );
+
+      display: flex;
+
+      flex-direction: column;
+
+      justify-content: space-between;
+
+      transition: transform .2s;
+    }
+
+    .meme:hover {
+      transform: translateY(-5px);
+    }
+
+    .meme-tag {
+      color: var(--red);
+
+      font-weight: 900;
+
+      font-size: 12px;
+
+      letter-spacing: 1px;
+    }
+
+    .meme-text {
+      font-size: 22px;
+
+      font-weight: 900;
+
+      line-height: 1.2;
+    }
+
+    .meme-footer {
+      color: #666;
+
+      font-size: 12px;
+    }
+
+    /* =========================
+       TOKEN
+    ========================= */
+
+    .token-card {
+      padding: 35px;
+
+      background:
+        linear-gradient(
+          135deg,
+          #1a0808,
+          #0d0d0d
+        );
+
+      border: 1px solid #421010;
+
+      border-radius: 25px;
+    }
+
+    .token-title {
+      font-size: 45px;
+
+      font-weight: 1000;
+
+      margin-bottom: 10px;
+    }
+
+    .token-title span {
+      color: var(--red);
+    }
+
+    .token-info {
+      display: grid;
+
+      grid-template-columns:
+        repeat(3, 1fr);
+
+      gap: 15px;
+
+      margin-top: 30px;
+    }
+
+    .token-stat {
+      background: #111;
+
+      border: 1px solid #292929;
+
+      border-radius: 15px;
+
+      padding: 18px;
+    }
+
+    .token-stat small {
+      display: block;
+
+      color: #777;
+
+      margin-bottom: 7px;
+    }
+
+    .token-stat strong {
+      word-break: break-all;
+    }
+
+    /* =========================
+       CTA
+    ========================= */
+
+    .cta {
+      text-align: center;
+
+      background:
+        linear-gradient(
+          135deg,
+          #8e0000,
+          #ff2417
+        );
+
+      border-radius: 28px;
+
+      padding: 55px 25px;
+
+      box-shadow:
+        0 20px 70px rgba(255, 36, 23, .18);
+    }
+
+    .cta h2 {
+      font-size: clamp(38px, 7vw, 65px);
+
+      font-weight: 1000;
+
+      margin-bottom: 12px;
+    }
+
+    .cta p {
+      color: #ffe7e5;
+
+      margin-bottom: 25px;
+    }
+
+    .cta-buttons {
+      display: flex;
+
+      justify-content: center;
+
+      flex-wrap: wrap;
+
+      gap: 10px;
+    }
+
+    .cta-button {
+      background: white;
+
+      color: #111;
+
+      padding: 14px 22px;
+
+      border-radius: 12px;
+
+      font-weight: 900;
+
+      cursor: pointer;
+
+      border: none;
+    }
+
+    .cta-button:hover {
+      transform: translateY(-2px);
+    }
+
+    /* =========================
+       FOOTER
+    ========================= */
+
+    footer {
+      border-top: 1px solid #222;
+
+      margin-top: 50px;
+
+      padding: 30px 0;
+
+      color: #666;
+
+      font-size: 13px;
+
+      line-height: 1.7;
+    }
+
+    /* =========================
+       SCREEN SHAKE
+    ========================= */
+
+    .shake {
+      animation:
+        shake .35s linear;
+    }
+
+    @keyframes shake {
+
+      0% {
+        transform: translateX(0);
+      }
+
+      20% {
+        transform: translateX(-8px);
+      }
+
+      40% {
+        transform: translateX(8px);
+      }
+
+      60% {
+        transform: translateX(-6px);
+      }
+
+      80% {
+        transform: translateX(6px);
+      }
+
+      100% {
+        transform: translateX(0);
+      }
+    }
+
+    /* =========================
+       MOBILE
+    ========================= */
+
+    @media (max-width: 750px) {
+
+      .nav-links {
+        display: none;
+      }
+
+      .hero {
+        padding-top: 45px;
+      }
+
+      .hero h1 {
+        letter-spacing: -4px;
+      }
+
+      .panic-button {
+        width: 205px;
+        height: 205px;
+        font-size: 28px;
+      }
+
+      .grid,
+      .meme-grid,
+      .token-info {
+        grid-template-columns: 1fr;
+      }
+
+      section {
+        padding: 50px 0;
+      }
+
+      .section-title {
+        font-size: 32px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="container">
+
+  <!-- =========================
+       NAVIGATION
+  ========================== -->
+
+  <nav>
+
+    <a href="#home" class="logo">
+      PANIC<span> BUTTON</span> 🔴
+    </a>
+
+    <div class="nav-links">
+      <a href="#panic-meter">Panic Meter</a>
+      <a href="#memes">Memes</a>
+      <a href="#token">Token</a>
+    </div>
+
+  </nav>
+
+
+  <!-- =========================
+       HERO
+  ========================== -->
+
+  <main id="home">
+
+    <section class="hero">
+
+      <div class="badge">
+        🚨 THE INTERNET'S EMERGENCY BUTTON
+      </div>
+
+      <h1>
+        PANIC<br>
+        <span>BUTTON</span>
+      </h1>
+
+      <p class="hero-description">
+        Crypto got weird?
+        Somebody posted a red candle?
+        You know what to do.
+      </p>
+
+      <div class="panic-area">
+
+        <button
+          id="panicButton"
+          class="panic-button"
+          aria-label="Press the PANIC button"
+        >
+          PANIC!
+        </button>
+
+        <div class="press-counter">
+          Button presses:
+          <strong id="pressCount">0</strong>
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- =========================
+         PANIC DASHBOARD
+    ========================== -->
+
+    <section id="panic-meter">
+
+      <h2 class="section-title">
+        🚨 PANIC CONTROL CENTER
+      </h2>
+
+      <p class="section-description">
+        Monitor the completely unofficial panic situation.
+      </p>
+
+      <div class="grid">
+
+        <!-- Panic level -->
+
+        <div class="card">
+
+          <h3>🌡️ Panic Level</h3>
+
+          <div
+            class="panic-number"
+            id="panicLevel"
+          >
+            0%
+          </div>
+
+          <div class="progress">
+            <div
+              id="progressFill"
+              class="progress-fill"
+            ></div>
+          </div>
+
+          <div
+            id="panicStatus"
+            class="status"
+          >
+            Surprisingly calm.
+          </div>
+
+        </div>
+
+
+        <!-- Alert -->
+
+        <div class="card">
+
+          <div class="alert-icon">
+            🚨
+          </div>
+
+          <h3>Emergency Alert</h3>
+
+          <div
+            id="alertText"
+            class="alert-box"
+          >
+            NO PANIC DETECTED
+          </div>
+
+          <p style="margin-top:15px;">
+            Press the button to activate the emergency system.
+          </p>
+
+        </div>
+
+
+        <!-- Mascot -->
+
+        <div class="card">
+
+          <div class="mascot">
+            🐔
+          </div>
+
+          <h3>Panic Chicken</h3>
+
+          <p>
+            Our official mascot has absolutely no idea
+            what is happening.
+          </p>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- =========================
+         MEMES
+    ========================== -->
+
+    <section id="memes">
+
+      <h2 class="section-title">
+        😂 COMMUNITY PANIC WALL
+      </h2>
+
+      <p class="section-description">
+        The official archive of terrible decisions.
+      </p>
+
+      <div class="meme-grid">
+
+        <div class="meme">
+
+          <span class="meme-tag">
+            PANIC #001
+          </span>
+
+          <div class="meme-text">
+            "It moved 0.4%. SELL EVERYTHING."
+          </div>
+
+          <span class="meme-footer">
+            Submitted by: Panic Chicken
+          </span>
+
+        </div>
+
+
+        <div class="meme">
+
+          <span class="meme-tag">
+            PANIC #002
+          </span>
+
+          <div class="meme-text">
+            "I checked the chart again. IT CHANGED."
+          </div>
+
+          <span class="meme-footer">
+            Submitted by: Anonymous
+          </span>
+
+        </div>
+
+
+        <div class="meme">
+
+          <span class="meme-tag">
+            PANIC #003
+          </span>
+
+          <div class="meme-text">
+            "WHO TOUCHED THE BUTTON?"
+          </div>
+
+          <span class="meme-footer">
+            Submitted by: Definitely Not Me
+          </span>
+
+        </div>
+
+
+        <div class="meme">
+
+          <span class="meme-tag">
+            PANIC #004
+          </span>
+
+          <div class="meme-text">
+            "THIS IS FINE."
+          </div>
+
+          <span class="meme-footer">
+            Submitted by: The Entire Internet
+          </span>
+
+        </div>
+
+
+        <div class="meme">
+
+          <span class="meme-tag">
+            PANIC #005
+          </span>
+
+          <div class="meme-text">
+            "I HAVE MADE A TERRIBLE DECISION."
+          </div>
+
+          <span class="meme-footer">
+            Submitted by: Someone
+          </span>
+
+        </div>
+
+
+        <div class="meme">
+
+          <span class="meme-tag">
+            PANIC #006
+          </span>
+
+          <div class="meme-text">
+            "ONE MORE CANDLE AND I'M CALLING MY MOM."
+          </div>
+
+          <span class="meme-footer">
+            Submitted by: Panic Department
+          </span>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- =========================
+         TOKEN
+    ========================== -->
+
+    <section id="token">
+
+      <div class="token-card">
+
+        <div class="token-title">
+          $<span>PANIC</span>
+        </div>
+
+        <p class="section-description">
+          PANIC BUTTON is a meme/community project.
+          Nothing on this website promises future token value
+          or investment returns.
+        </p>
+
+        <div class="token-info">
+
+          <div class="token-stat">
+
+            <small>
+              TOKEN
+            </small>
+
+            <strong>
+              $PANIC
+            </strong>
+
+          </div>
+
+
+          <div class="token-stat">
+
+            <small>
+              NETWORK
+            </small>
+
+            <strong>
+              Solana
+            </strong>
+
+          </div>
+
+
+          <div class="token-stat">
+
+            <small>
+              CONTRACT
+            </small>
+
+            <strong id="contractAddress">
+              COMING SOON
+            </strong>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- =========================
+         COMMUNITY CTA
+    ========================== -->
+
+    <section>
+
+      <div class="cta">
+
+        <h2>
+          DON'T PANIC.
+        </h2>
+
+        <p>
+          Actually... that's exactly why we built the button.
+        </p>
+
+        <div class="cta-buttons">
+
+          <!-- CHANGE THESE LINKS -->
+
+          <a
+            class="cta-button"
+            href="https://x.com/"
+            target="_blank"
+            rel="noopener"
+          >
+            𝕏 JOIN X
+          </a>
+
+          <a
+            class="cta-button"
+            href="https://t.me/"
+            target="_blank"
+            rel="noopener"
+          >
+            💬 TELEGRAM
+          </a>
+
+        </div>
+
+      </div>
+
+    </section>
+
+  </main>
+
+
+  <!-- =========================
+       FOOTER
+  ========================== -->
+
+  <footer>
+
+    © 2026 PANIC BUTTON — $PANIC
+
+    <br><br>
+
+    PANIC BUTTON is a meme/community project.
+    This website is for entertainment and community purposes.
+    Nothing here is financial advice or a guarantee of token
+    performance.
+
+  </footer>
+
+</div>
+
+
+<script>
+
+  /* ===================================
+     PANIC BUTTON JAVASCRIPT
+  =================================== */
+
+  let pressCount = 0;
+  let panicLevel = 0;
+
+  const panicButton =
+    document.getElementById("panicButton");
+
+  const pressCountElement =
+    document.getElementById("pressCount");
+
+  const panicLevelElement =
+    document.getElementById("panicLevel");
+
+  const progressFill =
+    document.getElementById("progressFill");
+
+  const panicStatus =
+    document.getElementById("panicStatus");
+
+  const alertText =
+    document.getElementById("alertText");
+
+
+  /* ===================================
+     ALERT MESSAGES
+  =================================== */
+
+  const alerts = [
+
+    "EVERYBODY STAY CALM.",
+
+    "THE CHART MOVED.",
+
+    "WHO PRESSED IT?!",
+
+    "THIS IS FINE.",
+
+    "PANIC LEVEL RISING.",
+
+    "WE HAVE A SITUATION.",
+
+    "THE CHICKEN HAS ESCAPED.",
+
+    "SOMEONE CHECK THE INTERNET.",
+
+    "EMERGENCY MEME DETECTED.",
+
+    "ABSOLUTELY NO REASON TO PANIC."
+
+  ];
+
+
+  /* ===================================
+     PANIC STATUS
+  =================================== */
+
+  const statuses = [
+
+    "Surprisingly calm.",
+
+    "Mild concern.",
+
+    "Eyebrows raised.",
+
+    "Someone is sweating.",
+
+    "ABSOLUTE PANIC.",
+
+    "CALL THE CHICKEN."
+
+  ];
+
+
+  /* ===================================
+     BUTTON CLICK
+  =================================== */
+
+  panicButton.addEventListener(
+    "click",
+    function () {
+
+      /*
+       * Increase button counter
+       */
+
+      pressCount++;
+
+      /*
+       * Increase panic level
+       * by a random amount
+       */
+
+      const increase =
+        Math.floor(Math.random() * 9) + 4;
+
+      panicLevel += increase;
+
+      /*
+       * Never exceed 100%
+       */
+
+      if (panicLevel > 100) {
+        panicLevel = 100;
+      }
+
+
+      /*
+       * Update counter
+       */
+
+      pressCountElement.textContent =
+        pressCount;
+
+
+      /*
+       * Update panic percentage
+       */
+
+      panicLevelElement.textContent =
+        panicLevel + "%";
+
+
+      /*
+       * Update progress bar
+       */
+
+      progressFill.style.width =
+        panicLevel + "%";
+
+
+      /*
+       * Update status
+       */
+
+      const statusIndex =
+        Math.min(
+          5,
+          Math.floor(panicLevel / 18)
+        );
+
+      panicStatus.textContent =
+        statuses[statusIndex];
+
+
+      /*
+       * Pick random alert
+       */
+
+      const randomAlert =
+        alerts[
+          Math.floor(
+            Math.random() * alerts.length
+          )
+        ];
+
+      alertText.textContent =
+        randomAlert;
+
+
+      /*
+       * Screen shake
+       */
+
+      document.body.classList.remove(
+        "shake"
+      );
+
+      void document.body.offsetWidth;
+
+      document.body.classList.add(
+        "shake"
+      );
+
+
+      /*
+       * If panic reaches 100,
+       * trigger emergency reset.
+       */
+
+      if (panicLevel >= 100) {
+
+        alertText.textContent =
+          "🚨 MAXIMUM PANIC ACHIEVED 🚨";
+
+        setTimeout(
+          function () {
+
+            panicLevel = 0;
+
+            panicLevelElement.textContent =
+              "0%";
+
+            progressFill.style.width =
+              "0%";
+
+            panicStatus.textContent =
+              "Emergency over. For now.";
+
+            alertText.textContent =
+              "PANIC SYSTEM RESET.";
+
+          },
+          1000
+        );
+
+      }
+
+    }
+  );
+
+
+  /* ===================================
+     KEYBOARD SUPPORT
+     =================================== */
+
+  document.addEventListener(
+    "keydown",
+    function (event) {
+
+      /*
+       * Spacebar or Enter
+       * activates the button.
+       */
+
+      if (
+        event.code === "Space" ||
+        event.code === "Enter"
+      ) {
+
+        /*
+         * Don't activate while
+         * typing inside another input.
+         */
+
+        const tag =
+          document.activeElement.tagName;
+
+        if (
+          tag !== "INPUT" &&
+          tag !== "TEXTAREA"
+        ) {
+
+          event.preventDefault();
+
+          panicButton.click();
+
+        }
+
+      }
+
+    }
+  );
+
+</script>
+
+</body>
+  </html>
